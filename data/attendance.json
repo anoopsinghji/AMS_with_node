@@ -1,0 +1,118 @@
+[
+  {
+    "date": "2026-03-27",
+    "class": "10A",
+    "teacherId": "T201",
+    "present": []
+  },
+  {
+    "date": "2026-03-26",
+    "class": "10A",
+    "teacherId": "T201",
+    "present": [
+      "S101"
+    ]
+  },
+  {
+    "date": "2026-03-27",
+    "class": "10A",
+    "teacherId": "T201",
+    "scheduleId": null,
+    "subject": null,
+    "timeSlot": null,
+    "present": [
+      "S101",
+      "S102"
+    ],
+    "absent": [
+      "S103"
+    ]
+  },
+  {
+    "date": "2026-03-27",
+    "class": "10A",
+    "teacherId": "T203",
+    "scheduleId": "SCH1774612701716",
+    "subject": "Hindi",
+    "timeSlot": "08:00-09:00",
+    "present": [
+      "S101",
+      "S102"
+    ],
+    "absent": [
+      "S103"
+    ]
+  },
+  {
+    "date": "2026-03-27",
+    "class": "10A",
+    "teacherId": "T201",
+    "scheduleId": "SCH001",
+    "subject": "English",
+    "timeSlot": "10:00-11:00",
+    "present": [
+      "S101",
+      "S102"
+    ],
+    "absent": [
+      "S103"
+    ]
+  },
+  {
+    "date": "2026-03-31",
+    "class": "10A",
+    "teacherId": "T203",
+    "scheduleId": "SCH1774612701716",
+    "subject": "Hindi",
+    "timeSlot": "08:00-09:00",
+    "present": [
+      "S101",
+      "S102"
+    ],
+    "absent": [
+      "S103"
+    ]
+  },
+  {
+    "date": "2026-03-31",
+    "class": "8A",
+    "teacherId": "T001",
+    "scheduleId": "SCH1774976750039",
+    "subject": "CAP269",
+    "timeSlot": "10:00-11:00",
+    "present": [
+      "S023"
+    ],
+    "absent": []
+  },
+  {
+    "date": "2026-03-31",
+    "class": "10A",
+    "teacherId": "T203",
+    "scheduleId": "SCH1774977514237",
+    "subject": "CAP269",
+    "timeSlot": "12:00-01:00",
+    "present": [
+      "S101",
+      "S102"
+    ],
+    "absent": [
+      "S103"
+    ]
+  },
+  {
+    "date": "2026-04-01",
+    "class": "10A",
+    "teacherId": "T203",
+    "scheduleId": "SCH1774977514237",
+    "subject": "CAP269",
+    "timeSlot": "12:00-01:00",
+    "present": [
+      "S102"
+    ],
+    "absent": [
+      "S101",
+      "S103"
+    ]
+  }
+]

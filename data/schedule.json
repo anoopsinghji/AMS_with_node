@@ -1,0 +1,102 @@
+[
+  {
+    "id": "SCH001",
+    "teacherId": "T201",
+    "className": "10A",
+    "subject": "English",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "day": "Monday",
+    "createdDate": "2026-03-27"
+  },
+  {
+    "id": "SCH1774610601282",
+    "teacherId": "T202",
+    "className": "8A",
+    "subject": "Mathematics",
+    "startTime": "11:00",
+    "endTime": "12:00",
+    "day": "Wednesday",
+    "createdDate": "2026-03-27"
+  },
+  {
+    "id": "SCH1774610616604",
+    "teacherId": "T202",
+    "className": "8A",
+    "subject": "Mathematics",
+    "startTime": "11:00",
+    "endTime": "12:00",
+    "day": "Wednesday",
+    "createdDate": "2026-03-27"
+  },
+  {
+    "id": "SCH1774610737180",
+    "teacherId": "T202",
+    "className": "10A",
+    "subject": "Hindi",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "day": "Monday",
+    "createdDate": "2026-03-27"
+  },
+  {
+    "id": "SCH1774611342416",
+    "teacherId": "T201",
+    "className": "10A",
+    "subject": "Hindi",
+    "startTime": "12:00",
+    "endTime": "10:00",
+    "day": "Saturday",
+    "createdDate": "2026-03-27"
+  },
+  {
+    "id": "SCH1774612701716",
+    "teacherId": "T203",
+    "className": "10A",
+    "subject": "Hindi",
+    "startTime": "08:00",
+    "endTime": "09:00",
+    "day": "Friday",
+    "createdDate": "2026-03-27"
+  },
+  {
+    "id": "SCH1774976750039",
+    "teacherId": "T001",
+    "className": "8A",
+    "subject": "CAP269",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "day": "Wednesday",
+    "createdDate": "2026-03-31"
+  },
+  {
+    "id": "SCH1774977514237",
+    "teacherId": "T203",
+    "className": "10A",
+    "subject": "CAP269",
+    "startTime": "12:00",
+    "endTime": "01:00",
+    "day": "Wednesday",
+    "createdDate": "2026-03-31"
+  },
+  {
+    "id": "SCH1775027928081",
+    "teacherId": "T202",
+    "className": "10A",
+    "subject": "CAP269tt",
+    "startTime": "15:52",
+    "endTime": "09:59",
+    "day": "Thursday",
+    "createdDate": "2026-04-01"
+  },
+  {
+    "id": "SCH1775064443738",
+    "teacherId": "T203",
+    "className": "8A",
+    "subject": "CAP269gfgf",
+    "startTime": "02:59",
+    "endTime": "17:08",
+    "day": "Tuesday",
+    "createdDate": "2026-04-01"
+  }
+]

@@ -1,0 +1,271 @@
+/* Custom SweetAlert2 Styling */
+
+:root {
+  --swal-primary: #10b981;
+  --swal-primary-dark: #059669;
+  --swal-secondary: #3b82f6;
+  --swal-error: #ef4444;
+  --swal-warning: #f59e0b;
+  --swal-success: #10b981;
+}
+
+/* Swal container styling */
+.swal2-container {
+  z-index: 9999;
+}
+
+/* Alert box styling */
+.swal2-popup {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(107, 114, 128, 0.1);
+}
+
+/* Title styling */
+.swal2-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+  letter-spacing: -0.5px;
+}
+
+/* Content text styling */
+.swal2-html-container {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Buttons styling */
+.swal2-confirm,
+.swal2-cancel,
+.swal2-default-outline:focus {
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.swal2-confirm {
+  background-color: var(--swal-primary) !important;
+  color: white !important;
+  border: none !important;
+}
+
+.swal2-confirm:hover {
+  background-color: var(--swal-primary-dark) !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+.swal2-confirm:active {
+  transform: translateY(0);
+}
+
+.swal2-cancel {
+  background-color: #9ca3af !important;
+  color: white !important;
+  border: none !important;
+}
+
+.swal2-cancel:hover {
+  background-color: #6b7280 !important;
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+.swal2-cancel:active {
+  transform: translateY(0);
+}
+
+/* Icon styling */
+.swal2-icon {
+  border-radius: 50%;
+}
+
+.swal2-icon.swal2-success {
+  border-color: var(--swal-success);
+}
+
+.swal2-success-circular-line-left,
+.swal2-success-circular-line-right {
+  background-color: #fff;
+}
+
+.swal2-success-ring {
+  border-color: var(--swal-success);
+}
+
+.swal2-icon.swal2-error {
+  border-color: var(--swal-error);
+}
+
+.swal2-x-mark {
+  background-color: var(--swal-error);
+}
+
+.swal2-x-mark .swal2-x-mark-line-left,
+.swal2-x-mark .swal2-x-mark-line-right {
+  background-color: white;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: var(--swal-warning);
+  background-color: var(--swal-warning);
+}
+
+.swal2-icon.swal2-question {
+  border-color: var(--swal-secondary);
+  background-color: var(--swal-secondary);
+}
+
+.swal2-icon.swal2-info {
+  border-color: var(--swal-secondary);
+}
+
+/* Loading spinner */
+.swal2-loading {
+  color: var(--swal-primary);
+}
+
+/* Input styling */
+.swal2-input {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.swal2-input:focus {
+  border-color: var(--swal-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Select styling */
+.swal2-select {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.swal2-select:focus {
+  border-color: var(--swal-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Textarea styling */
+.swal2-textarea {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.swal2-textarea:focus {
+  border-color: var(--swal-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Progress bar */
+.swal2-progress-steps-container {
+  margin: 20px 0;
+}
+
+.swal2-progress-step {
+  background: #e5e7eb;
+  color: #6b7280;
+  border-color: #e5e7eb;
+}
+
+.swal2-progress-step.active {
+  background: var(--swal-primary);
+  color: white;
+  border-color: var(--swal-primary);
+}
+
+.swal2-progress-step.completed {
+  background: var(--swal-primary);
+  color: white;
+  border-color: var(--swal-primary);
+}
+
+.swal2-progress-steps-container .swal2-progress-line {
+  background: #e5e7eb;
+}
+
+.swal2-progress-steps-container .swal2-progress-step.active ~ .swal2-progress-line,
+.swal2-progress-steps-container .swal2-progress-step.completed ~ .swal2-progress-line {
+  background: var(--swal-primary);
+}
+
+/* Timer progress bar */
+.swal2-timer-progress-bar-container {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.swal2-timer-progress-bar {
+  background: var(--swal-primary);
+}
+
+/* Backdrop */
+.swal2-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Animation tweaks */
+@keyframes swal2-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.swal2-popup {
+  animation: swal2-show 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .swal2-popup {
+    width: 85vw !important;
+  }
+
+  .swal2-title {
+    font-size: 20px;
+  }
+
+  .swal2-html-container {
+    font-size: 14px;
+  }
+
+  .swal2-confirm,
+  .swal2-cancel {
+    font-size: 13px;
+    padding: 8px 16px;
+  }
+}
+
+/* Accessibility */
+.swal2-popup:focus {
+  outline: 2px solid var(--swal-primary);
+  outline-offset: 2px;
+}
+
+button.swal2-confirm:focus,
+button.swal2-cancel:focus {
+  outline: 2px solid white;
+  outline-offset: -2px;
+}

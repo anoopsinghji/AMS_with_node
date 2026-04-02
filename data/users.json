@@ -1,0 +1,51 @@
+[
+  {
+    "id": "P001",
+    "name": "Principal User",
+    "password": "$2b$10$iNUAa48IhXf/xacwtlUwduM7lb4VbAepKHoskEJTrZNFgoULEMXIu",
+    "role": "principal"
+  },
+  {
+    "id": "T201",
+    "name": "Class Teacher",
+    "password": "$2b$10$XobEkE8hn5FITHXI0uqY0.ZMmt94oAgGUcRb.zqtFScmM7bGI0j36",
+    "role": "teacher",
+    "assignedClass": "10A"
+  },
+  {
+    "id": "T202",
+    "name": "Mrs. Sarah Williams",
+    "email": "sarah@school.com",
+    "phone": "9876543211",
+    "password": "$2b$10$zbSl1x.rmnBKe20nP67izOFGazrL/jkk/g162juS2QlugWTCKWErS",
+    "role": "teacher",
+    "assignedClass": "8A"
+  },
+  {
+    "id": "T203",
+    "name": "Anoop Singh",
+    "email": "anoop@gmail.com",
+    "phone": "6260975228",
+    "password": "$2b$10$Dfha.CPYAu8xn1uGfB.AeOc8m1LJNSo6BmNGzTBIjxNTYYVw4.NH.",
+    "role": "teacher",
+    "assignedClass": ""
+  },
+  {
+    "id": "T301",
+    "name": "Sumit Kumar Singh",
+    "email": "yash@gmail.com",
+    "phone": "06260975228",
+    "password": "$2b$10$NvRjkpa4dyIFE18AfsIbueKRcVR./pgXZXNbtQhNSwBNv2Ifpwsym",
+    "role": "teacher",
+    "assignedClass": ""
+  },
+  {
+    "id": "T001",
+    "name": "yash",
+    "email": "anoop@gmail.com",
+    "phone": "06260975228",
+    "password": "$2b$10$ccxo0BxRMewgVC7ZnT9w2eMfs33Idq6E4R4VGuRyqXgjyKR3jaw3i",
+    "role": "teacher",
+    "assignedClass": ""
+  }
+]

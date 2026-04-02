@@ -1,0 +1,29 @@
+[
+  {
+    "id": "S101",
+    "name": "Anup",
+    "class": "10A"
+  },
+  {
+    "id": "S102",
+    "name": "Riya",
+    "class": "10A"
+  },
+  {
+    "id": "S023",
+    "name": "Sumit Kumar",
+    "class": "8A"
+  },
+  {
+    "id": "S103",
+    "name": "Mike Brown",
+    "class": "10A",
+    "email": "mike@mail.com",
+    "phone": "9876543212",
+    "dateOfBirth": "2010-05-15",
+    "address": "123 Main Street",
+    "parentName": "Mr. David Brown",
+    "parentPhone": "9876543000",
+    "admissionDate": "2026-03-27"
+  }
+]

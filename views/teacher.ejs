@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="/css/sweetalert-custom.css" />
+    
+    <!-- Toastr Notifications -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    
+    <!-- Select2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    
+    <!-- Flatpickr Date Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    
+    <!-- AOS Animations -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Teacher Dashboard Styling -->
+    <link rel="stylesheet" href="/css/teacher-dashboard.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Teacher Dashboard</h1>
+      </div>
+      <button id="logoutBtn" class="ghost">Logout</button>
+    </header>
+
+    <main>
+      <!-- Stats Bar -->
+      <section class="stats-container">
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Today's Classes</p>
+            <p class="stat-value" id="todayCount">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="fas fa-hourglass-end"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Pending Attendance</p>
+            <p class="stat-value" id="pendingCount">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <i class="fas fa-stream"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Upcoming Classes</p>
+            <p class="stat-value" id="upcomingCount">0</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-content">
+            <p class="stat-label">Total Classes</p>
+            <p class="stat-value" id="totalCount">0</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Content Grid -->
+      <section class="schedule-grid">
+
+        <!-- Today's Classes -->
+        <div class="schedule-section">
+          <div class="section-header">
+            <h2><i class="fas fa-sun"></i> Today's Classes</h2>
+            <span class="badge badge-primary" id="todayBadge">0</span>
+          </div>
+          <div class="classes-list" id="todayClasses">
+            <p class="empty-state">No classes scheduled for today</p>
+          </div>
+        </div>
+
+        <!-- Pending Attendance -->
+        <div class="schedule-section">
+          <div class="section-header">
+            <h2><i class="fas fa-exclamation-circle"></i> Pending Attendance</h2>
+            <span class="badge badge-warning" id="pendingBadge">0</span>
+          </div>
+          <div class="classes-list" id="pendingClasses">
+            <p class="empty-state">No pending attendance</p>
+          </div>
+        </div>
+
+        <!-- Upcoming Classes -->
+        <div class="schedule-section">
+          <div class="section-header">
+            <h2><i class="fas fa-forward"></i> Upcoming Classes</h2>
+            <span class="badge badge-secondary" id="upcomingBadge">0</span>
+          </div>
+          <div class="classes-list" id="upcomingClasses">
+            <p class="empty-state">No upcoming classes</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Attendance Modal -->
+      <div id="attendanceModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="modalTitle">Mark Attendance</h2>
+            <button class="modal-close" id="closeModal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            <div class="class-info-banner">
+              <div class="info-row">
+                <span class="info-label"> Class:</span>
+                <span class="info-value" id="modalClass">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label"> Subject:</span>
+                <span class="info-value" id="modalSubject">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label"> Time:</span>
+                <span class="info-value" id="modalTime">-</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; margin-bottom: 20px;">
+              <label for="attendanceDate" style="display: block; margin-bottom: 8px; font-weight: 600;">Select Date</label>
+              <input id="attendanceDate" type="date" class="modal-input" />
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <label style="font-weight: 600;">Mark Students Present</label>
+                <div class="selection-controls">
+                  <button type="button" id="selectAllBtn" class="link-btn" title="Select All">
+                    <i class="fas fa-check-double"></i> All
+                  </button>
+                  <button type="button" id="deselectAllBtn" class="link-btn" title="Deselect All">
+                    <i class="fas fa-times"></i> Clear
+                  </button>
+                </div>
+              </div>
+              <form id="attendanceForm" class="student-list"></form>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn-secondary" id="cancelAttendanceBtn">Cancel</button>
+            <button class="btn-primary" id="submitAttendanceBtn">
+              <i class="fas fa-check"></i> Submit Attendance
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <!-- Moment.js -->
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    
+    <!-- Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="/js/teacher.js"></script>
+  </body>
+</html>

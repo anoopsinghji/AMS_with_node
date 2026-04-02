@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+    <link rel="stylesheet" href="/css/sweetalert-custom.css" />
+    
+    <!-- Toastr Notifications -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    
+    <!-- Select2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    
+    <!-- Flatpickr Date Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+    
+    <!-- AOS Animations -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Custom Styling -->
+    <link rel="stylesheet" href="/css/principal-enhanced.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Admin Dashboard</h1>
+      </div>
+      <button id="logoutBtn" class="ghost">Logout</button>
+    </header>
+
+    <main class="grid two">
+      <section class="card">
+        <h2>Create Teacher Account</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">Register a new teacher in the system</p>
+        <form id="createTeacherForm" class="stack">
+          <div>
+            <label for="teacherId">Teacher ID</label>
+            <input id="teacherId" name="id" placeholder="e.g., T202" required />
+          </div>
+
+          <div>
+            <label for="teacherName">Full Name</label>
+            <input id="teacherName" name="name" placeholder="e.g., Mr. John Smith" required />
+          </div>
+
+          <div>
+            <label for="teacherEmail">Email</label>
+            <input id="teacherEmail" name="email" type="email" placeholder="email@example.com" />
+          </div>
+
+          <div>
+            <label for="teacherPhone">Phone Number</label>
+            <input id="teacherPhone" name="phone" type="tel" placeholder="9876543210" />
+          </div>
+
+          <div>
+            <label for="teacherPassword">Password</label>
+            <input id="teacherPassword" name="password" type="password" placeholder="••••••••" required />
+          </div>
+
+          <button type="submit">Create Account</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2> Student Admission Form</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">Register a new student with complete details</p>
+        <form id="addStudentForm" class="stack">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label for="studentId">Student ID</label>
+              <input id="studentId" name="id" placeholder="e.g., S102" required />
+            </div>
+            <div>
+              <label for="studentName">Full Name</label>
+              <input id="studentName" name="name" placeholder="e.g., Jane Doe" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label for="studentClass">Class</label>
+              <input id="studentClass" name="className" placeholder="e.g., 10A" required />
+            </div>
+            <div>
+              <label for="studentEmail">Email</label>
+              <input id="studentEmail" name="email" type="email" placeholder="student@example.com" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label for="studentPhone">Phone</label>
+              <input id="studentPhone" name="phone" type="tel" placeholder="9876543210" />
+            </div>
+            <div>
+              <label for="dob">Date of Birth</label>
+              <input id="dob" name="dateOfBirth" type="date" />
+            </div>
+          </div>
+
+          <div>
+            <label for="studentAddress">Address</label>
+            <input id="studentAddress" name="address" placeholder="Complete address" />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label for="parentName">Parent/Guardian Name</label>
+              <input id="parentName" name="parentName" placeholder="e.g., Mr. John Doe" />
+            </div>
+            <div>
+              <label for="parentPhone">Parent Phone</label>
+              <input id="parentPhone" name="parentPhone" type="tel" placeholder="9876543210" />
+            </div>
+          </div>
+
+          <button type="submit">Register Student</button>
+        </form>
+      </section>
+
+      <section class="card full">
+        <h2>Create Class Schedule</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">Create time slots for classes (e.g., 10:00-11:00 English for 10A taught by T201)</p>
+        <form id="createScheduleForm" class="stack">
+          <div class="form-row-two-cols">
+            <div>
+              <label for="schedTeacherId">Teacher</label>
+              <select id="schedTeacherId" name="teacherId" required class="form-select">
+                <option value="">-- Select teacher --</option>
+              </select>
+            </div>
+            <div>
+              <label for="schedClassName">Class</label>
+              <select id="schedClassName" name="className" required class="form-select">
+                <option value="">-- Select class --</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-two-cols">
+            <div>
+              <label for="schedSubject">Subject</label>
+              <input id="schedSubject" name="subject" placeholder="e.g., English, Mathematics" required />
+            </div>
+            <div>
+              <label for="schedDay">Day</label>
+              <select id="schedDay" name="day" required class="form-select">
+                <option value="">-- Select day --</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-two-cols">
+            <div>
+              <label for="schedStartTime">Start Time</label>
+              <input id="schedStartTime" name="startTime" type="time" required />
+            </div>
+            <div>
+              <label for="schedEndTime">End Time</label>
+              <input id="schedEndTime" name="endTime" type="time" required />
+            </div>
+          </div>
+
+          <button type="submit">Create Schedule</button>
+        </form>
+      </section>
+
+      <section class="card full">
+        <h2>Class Schedule List</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">View all created class schedules</p>
+        <ul id="scheduleList" class="list"></ul>
+      </section>
+
+      <!-- Statistics & Analytics Section -->
+      <section class="card full" data-aos="fade-up">
+        <h2><i class="fas fa-chart-pie"></i> Attendance Statistics</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 20px;">Real-time attendance insights and analytics</p>
+        <div class="stats-charts-grid">
+          <div class="stats-chart-box">
+            <h4>Attendance Rate by Class</h4>
+            <div class="stats-chart-container">
+              <canvas id="classAttendanceChart"></canvas>
+            </div>
+          </div>
+          <div class="stats-chart-box">
+            <h4>Teacher Performance</h4>
+            <div class="stats-chart-container">
+              <canvas id="teacherPerformanceChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Attendance Records Table -->
+      <section class="card full" data-aos="fade-up" data-aos-delay="100">
+        <h2><i class="fas fa-table"></i> Attendance Records</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">Complete attendance history with filtering and export</p>
+        <table id="attendanceTable" class="display" style="width:100%">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Class</th>
+              <th>Teacher</th>
+              <th>Subject</th>
+              <th>Present</th>
+              <th>Absent</th>
+              <th>Total</th>
+              <th>Rate</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody">
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Students Summary -->
+      <section class="card full" data-aos="fade-up" data-aos-delay="200">
+        <h2><i class="fas fa-users"></i> Student Records</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">All registered students with detailed information</p>
+        <table id="studentsTable" class="display" style="width:100%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Parent Name</th>
+              <th>Admission Date</th>
+            </tr>
+          </thead>
+          <tbody id="studentsTableBody">
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card full">
+        <h2>👨‍🏫 Teachers List</h2>
+        <p style="color: var(--text-light); font-size: 13px; margin-bottom: 16px;">View all registered teachers and their assignments</p>
+        <ul id="teacherList" class="list"></ul>
+      </section>
+
+      <p id="message" class="message"></p>
+    </main>
+
+    <!-- jQuery (required for DataTables and Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    
+    <!-- Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <!-- Moment.js -->
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    
+    <!-- Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    
+    <!-- Custom Script -->
+    <script src="/js/principal.js"></script>
+  </body>
+</html>
