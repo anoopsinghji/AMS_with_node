@@ -479,7 +479,7 @@ For issues and questions:
 Created with ❤️ for educational institutions.
 
 **Version**: 1.0.0  
-**Last Updated**: 2024  
+**Last Updated**: 02-04-2026  
 **Status**: Active Development
 
 ---
