@@ -114,5 +114,20 @@
       "S101",
       "S103"
     ]
+  },
+  {
+    "date": "2026-04-02",
+    "class": "10A",
+    "teacherId": "T203",
+    "scheduleId": "SCH1774977514237",
+    "subject": "CAP269",
+    "timeSlot": "12:00-01:00",
+    "present": [
+      "S101",
+      "S102"
+    ],
+    "absent": [
+      "S103"
+    ]
   }
 ]

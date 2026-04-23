@@ -1,6 +1,9 @@
 const express = require("express");
 const { authenticateToken, requireRole } = require("../middleware/auth");
-const { readJson, writeJson } = require("../utils/fileStore");
+const User = require("../models/User");
+const Student = require("../models/Student");
+const Schedule = require("../models/Schedule");
+const Attendance = require("../models/Attendance");
 
 const router = express.Router();
 
@@ -14,156 +17,143 @@ function normalizeDate(value) {
   return d.toISOString().slice(0, 10);
 }
 
-router.get("/my-class", (req, res) => {
-  const users = readJson("users.json", []);
-  const students = readJson("students.json", []);
+router.get("/my-class", async (req, res) => {
+  try {
+    const teacher = await User.findOne({ id: req.user.id, role: "teacher" }).lean();
 
-  const teacher = users.find(
-    (user) => user.id === req.user.id && user.role === "teacher"
-  );
+    if (!teacher || !teacher.assignedClass) {
+      return res.status(404).json({ error: "No class assigned" });
+    }
 
-  if (!teacher || !teacher.assignedClass) {
-    return res.status(404).json({ error: "No class assigned" });
+    const students = await Student.find({ class: teacher.assignedClass }).select("-__v -_id").lean();
+
+    return res.json({
+      className: teacher.assignedClass,
+      students,
+    });
+  } catch (error) {
+    console.error("My class error:", error.message);
+    return res.status(500).json({ error: "Could not fetch class data" });
   }
-
-  const classStudents = students.filter(
-    (student) => student.class === teacher.assignedClass
-  );
-
-  return res.json({
-    className: teacher.assignedClass,
-    students: classStudents,
-  });
 });
 
-router.get("/my-schedule", (req, res) => {
-  const schedule = readJson("schedule.json", []);
-  const teacherSchedule = schedule.filter((s) => s.teacherId === req.user.id);
-
-  return res.json({ schedules: teacherSchedule });
+router.get("/my-schedule", async (req, res) => {
+  try {
+    const schedules = await Schedule.find({ teacherId: req.user.id }).select("-__v -_id").lean();
+    return res.json({ schedules });
+  } catch (error) {
+    console.error("My schedule error:", error.message);
+    return res.status(500).json({ error: "Could not fetch schedule" });
+  }
 });
 
-router.get("/schedule/:scheduleId/students", (req, res) => {
+router.get("/schedule/:scheduleId/students", async (req, res) => {
   const { scheduleId } = req.params;
-  const schedule = readJson("schedule.json", []);
-  const scheduleItem = schedule.find((s) => s.id === scheduleId);
 
-  if (!scheduleItem) {
-    return res.status(404).json({ error: "Schedule not found" });
+  try {
+    const scheduleItem = await Schedule.findOne({ id: scheduleId }).lean();
+
+    if (!scheduleItem) {
+      return res.status(404).json({ error: "Schedule not found" });
+    }
+
+    if (scheduleItem.teacherId !== req.user.id) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    const students = await Student.find({ class: scheduleItem.className }).select("-__v -_id").lean();
+
+    return res.json({
+      scheduleId,
+      className: scheduleItem.className,
+      subject: scheduleItem.subject,
+      time: `${scheduleItem.startTime} - ${scheduleItem.endTime}`,
+      students,
+    });
+  } catch (error) {
+    console.error("Schedule students error:", error.message);
+    return res.status(500).json({ error: "Could not fetch schedule students" });
   }
-
-  if (scheduleItem.teacherId !== req.user.id) {
-    return res.status(403).json({ error: "Unauthorized" });
-  }
-
-  const students = readJson("students.json", []);
-  const classStudents = students.filter((s) => s.class === scheduleItem.className);
-
-  return res.json({
-    scheduleId,
-    className: scheduleItem.className,
-    subject: scheduleItem.subject,
-    time: `${scheduleItem.startTime} - ${scheduleItem.endTime}`,
-    students: classStudents,
-  });
 });
 
-router.post("/submit-attendance", (req, res) => {
+router.post("/submit-attendance", async (req, res) => {
   const { presentIds = [], date, scheduleId } = req.body;
 
   if (!Array.isArray(presentIds)) {
     return res.status(400).json({ error: "presentIds must be an array" });
   }
 
-  const users = readJson("users.json", []);
-  const students = readJson("students.json", []);
-  const attendance = readJson("attendance.json", []);
-  const schedule = readJson("schedule.json", []);
+  try {
+    const teacher = await User.findOne({ id: req.user.id, role: "teacher" }).lean();
 
-  const teacher = users.find(
-    (user) => user.id === req.user.id && user.role === "teacher"
-  );
-
-  if (!teacher) {
-    return res.status(404).json({ error: "Teacher not found" });
-  }
-
-  const attendanceDate = normalizeDate(date);
-  if (!attendanceDate) {
-    return res.status(400).json({ error: "Invalid date" });
-  }
-
-  const today = new Date().toISOString().slice(0, 10);
-  if (attendanceDate > today) {
-    return res.status(400).json({ error: "Future attendance is not allowed" });
-  }
-
-  let className = "";
-  let subject = "";
-  let timeSlot = "";
-
-  if (scheduleId) {
-    const scheduleItem = schedule.find((s) => s.id === scheduleId);
-    if (!scheduleItem || scheduleItem.teacherId !== teacher.id) {
-      return res.status(403).json({ error: "Unauthorized schedule" });
+    if (!teacher) {
+      return res.status(404).json({ error: "Teacher not found" });
     }
-    className = scheduleItem.className;
-    subject = scheduleItem.subject;
-    timeSlot = `${scheduleItem.startTime}-${scheduleItem.endTime}`;
-  } else if (teacher.assignedClass) {
-    className = teacher.assignedClass;
-  } else {
-    return res.status(400).json({ error: "No assigned class or schedule" });
-  }
 
-  const validStudentIds = new Set(
-    students
-      .filter((student) => student.class === className)
-      .map((student) => student.id)
-  );
-
-  for (const studentId of presentIds) {
-    if (!validStudentIds.has(studentId)) {
-      return res.status(400).json({
-        error: `Student ${studentId} does not belong to ${className}`,
-      });
+    const attendanceDate = normalizeDate(date);
+    if (!attendanceDate) {
+      return res.status(400).json({ error: "Invalid date" });
     }
-  }
 
-  const uniquePresentIds = [...new Set(presentIds)];
-  const uniqueAbsentIds = [...validStudentIds].filter((id) => !presentIds.includes(id));
+    const today = new Date().toISOString().slice(0, 10);
+    if (attendanceDate > today) {
+      return res.status(400).json({ error: "Future attendance is not allowed" });
+    }
 
-  const existingIndex = attendance.findIndex(
-    (row) =>
-      row.date === attendanceDate &&
-      row.class === className &&
-      row.teacherId === teacher.id &&
-      row.scheduleId === (scheduleId || null)
-  );
+    let className = "";
+    let subject = "";
+    let timeSlot = "";
 
-  const record = {
-    date: attendanceDate,
-    class: className,
-    teacherId: teacher.id,
-    scheduleId: scheduleId || null,
-    subject: subject || null,
-    timeSlot: timeSlot || null,
-    present: uniquePresentIds,
-    absent: uniqueAbsentIds,
-  };
+    if (scheduleId) {
+      const scheduleItem = await Schedule.findOne({ id: scheduleId }).lean();
+      if (!scheduleItem || scheduleItem.teacherId !== teacher.id) {
+        return res.status(403).json({ error: "Unauthorized schedule" });
+      }
+      className = scheduleItem.className;
+      subject = scheduleItem.subject;
+      timeSlot = `${scheduleItem.startTime}-${scheduleItem.endTime}`;
+    } else if (teacher.assignedClass) {
+      className = teacher.assignedClass;
+    } else {
+      return res.status(400).json({ error: "No assigned class or schedule" });
+    }
 
-  if (existingIndex >= 0) {
-    attendance[existingIndex] = record;
-  } else {
-    attendance.push(record);
-  }
+    const classStudents = await Student.find({ class: className }).select("id -_id").lean();
+    const validStudentIds = new Set(classStudents.map((student) => student.id));
 
-  const saved = writeJson("attendance.json", attendance);
-  if (!saved) {
+    for (const studentId of presentIds) {
+      if (!validStudentIds.has(studentId)) {
+        return res.status(400).json({
+          error: `Student ${studentId} does not belong to ${className}`,
+        });
+      }
+    }
+
+    const uniquePresentIds = [...new Set(presentIds)];
+    const uniqueAbsentIds = [...validStudentIds].filter((id) => !uniquePresentIds.includes(id));
+
+    const filter = {
+      date: attendanceDate,
+      class: className,
+      teacherId: teacher.id,
+      scheduleId: scheduleId || null,
+    };
+
+    const record = {
+      ...filter,
+      subject: subject || null,
+      timeSlot: timeSlot || null,
+      present: uniquePresentIds,
+      absent: uniqueAbsentIds,
+    };
+
+    await Attendance.findOneAndUpdate(filter, record, { upsert: true, new: true, setDefaultsOnInsert: true });
+
+    return res.status(201).json({ message: "Attendance submitted", record });
+  } catch (error) {
+    console.error("Submit attendance error:", error.message);
     return res.status(500).json({ error: "Could not save attendance" });
   }
-
-  return res.status(201).json({ message: "Attendance submitted", record });
 });
 
 module.exports = router;
