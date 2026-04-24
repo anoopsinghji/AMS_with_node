@@ -8,8 +8,8 @@
     "test": "echo \"No tests configured yet\""
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Anoop Singh",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "aos": "^2.3.4",
