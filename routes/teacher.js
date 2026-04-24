@@ -39,8 +39,28 @@ router.get("/my-class", async (req, res) => {
 
 router.get("/my-schedule", async (req, res) => {
   try {
-    const schedules = await Schedule.find({ teacherId: req.user.id }).select("-__v -_id").lean();
-    return res.json({ schedules });
+    const today = new Date().toISOString().slice(0, 10);
+
+    const [schedules, todayAttendance] = await Promise.all([
+      Schedule.find({ teacherId: req.user.id }).select("-__v -_id").lean(),
+      Attendance.find({
+        teacherId: req.user.id,
+        date: today,
+        scheduleId: { $ne: null },
+      })
+        .select("scheduleId -_id")
+        .lean(),
+    ]);
+
+    const markedScheduleIds = [
+      ...new Set(todayAttendance.map((record) => record.scheduleId).filter(Boolean)),
+    ];
+
+    return res.json({
+      schedules,
+      markedScheduleIds,
+      date: today,
+    });
   } catch (error) {
     console.error("My schedule error:", error.message);
     return res.status(500).json({ error: "Could not fetch schedule" });

@@ -68,6 +68,7 @@ attendanceDate.value = new Date().toISOString().slice(0, 10);
 let currentScheduleId = null;
 let currentScheduleData = null;
 let schedules = [];
+let markedScheduleIds = new Set();
 
 function headers() {
   return {
@@ -133,6 +134,7 @@ async function loadSchedules() {
     }
 
     schedules = data.schedules || [];
+    markedScheduleIds = new Set(data.markedScheduleIds || []);
     organizeAndDisplaySchedules();
   } catch (error) {
     showMessage("Network error while loading schedules");
@@ -177,9 +179,25 @@ function displayScheduleGroup(elementId, scheduleList, type) {
   }
 
   container.innerHTML = scheduleList.map(schedule => {
-    const isToday = isTodayClass(schedule);
+    const isMarked = markedScheduleIds.has(schedule.id);
+    const cardClassName = isMarked ? `${type} completed` : type;
+    const actionHtml = isMarked
+      ? `
+        <span class="card-badge card-badge-success">
+          <i class="fas fa-check-circle"></i> Marked
+        </span>
+        <button class="card-btn card-btn-disabled" type="button" disabled>
+          <i class="fas fa-check"></i> Already Marked
+        </button>
+      `
+      : `
+        <button class="card-btn" type="button" onclick="openAttendanceModal('${schedule.id}', '${schedule.className}', '${schedule.subject}', '${schedule.startTime}', '${schedule.endTime}')">
+          <i class="fas fa-clipboard-list"></i> Mark Attendance
+        </button>
+      `;
+
     return `
-      <div class="class-card ${type}">
+      <div class="class-card ${cardClassName}">
         <div class="class-card-content">
           <p class="class-card-title">${schedule.subject}</p>
           <p class="class-card-meta">
@@ -189,9 +207,7 @@ function displayScheduleGroup(elementId, scheduleList, type) {
           </p>
         </div>
         <div class="class-card-action">
-          <button class="card-btn" onclick="openAttendanceModal('${schedule.id}', '${schedule.className}', '${schedule.subject}', '${schedule.startTime}', '${schedule.endTime}')">
-            <i class="fas fa-clipboard-list"></i> Mark Attendance
-          </button>
+          ${actionHtml}
         </div>
       </div>
     `;

@@ -118,11 +118,62 @@ router.post("/assign-class", async (req, res) => {
 
 router.get("/teachers", async (_req, res) => {
   try {
-    const teachers = await User.find({ role: "teacher" })
-      .select("id name email phone assignedClass -_id")
-      .lean();
+    const [teachers, attendanceRecords] = await Promise.all([
+      User.find({ role: "teacher" })
+        .select("id name email phone assignedClass -_id")
+        .lean(),
+      Attendance.find()
+        .select("teacherId present absent presentStudents absentStudents -_id")
+        .lean(),
+    ]);
 
-    return res.json({ teachers });
+    const attendanceByTeacher = attendanceRecords.reduce((acc, record) => {
+      const teacherId = record.teacherId;
+      if (!teacherId) return acc;
+
+      if (!acc[teacherId]) {
+        acc[teacherId] = { sessionsMarked: 0, presentCount: 0, absentCount: 0 };
+      }
+
+      const presentCount = Array.isArray(record.present)
+        ? record.present.length
+        : Array.isArray(record.presentStudents)
+          ? record.presentStudents.length
+          : 0;
+      const absentCount = Array.isArray(record.absent)
+        ? record.absent.length
+        : Array.isArray(record.absentStudents)
+          ? record.absentStudents.length
+          : 0;
+
+      acc[teacherId].sessionsMarked += 1;
+      acc[teacherId].presentCount += presentCount;
+      acc[teacherId].absentCount += absentCount;
+
+      return acc;
+    }, {});
+
+    const enrichedTeachers = teachers.map((teacher) => {
+      const perf = attendanceByTeacher[teacher.id] || {
+        sessionsMarked: 0,
+        presentCount: 0,
+        absentCount: 0,
+      };
+      const totalMarked = perf.presentCount + perf.absentCount;
+      const attendanceRate = totalMarked > 0
+        ? Number(((perf.presentCount / totalMarked) * 100).toFixed(1))
+        : 0;
+
+      return {
+        ...teacher,
+        sessionsMarked: perf.sessionsMarked,
+        presentCount: perf.presentCount,
+        absentCount: perf.absentCount,
+        attendanceRate,
+      };
+    });
+
+    return res.json({ teachers: enrichedTeachers });
   } catch (error) {
     console.error("Get teachers error:", error.message);
     return res.status(500).json({ error: "Could not fetch teachers" });

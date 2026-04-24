@@ -366,8 +366,14 @@ async function initializeTeacherPerformanceChart() {
     teacherPerformanceChartInstance.destroy();
   }
 
-  const labels = teachers.slice(0, 10).map((t) => t.name || t.id);
-  const classAssignmentData = teachers.slice(0, 10).map((t) => (t.assignedClass ? 1 : 0));
+  const topTeachers = teachers.slice(0, 10);
+  const labels = topTeachers.map((t) => t.name || t.id);
+  const sessionsMarkedData = topTeachers.map((t) => Number(t.sessionsMarked) || 0);
+  const classAssignmentData = topTeachers.map((t) => (t.assignedClass ? 1 : 0));
+  const hasSessionData = sessionsMarkedData.some((v) => v > 0);
+  const datasetData = hasSessionData ? sessionsMarkedData : classAssignmentData;
+  const datasetLabel = hasSessionData ? "Attendance Sessions Marked" : "Classes Assigned";
+  const maxValue = Math.max(...datasetData, 0);
 
   teacherPerformanceChartInstance = new Chart(ctx, {
     type: "bar",
@@ -375,8 +381,8 @@ async function initializeTeacherPerformanceChart() {
       labels: labels,
       datasets: [
         {
-          label: "Classes Assigned",
-          data: classAssignmentData,
+          label: datasetLabel,
+          data: datasetData,
           backgroundColor: "#3498db",
           borderColor: "#2980b9",
           borderWidth: 1,
@@ -391,7 +397,7 @@ async function initializeTeacherPerformanceChart() {
       scales: {
         x: {
           beginAtZero: true,
-          max: 1,
+          max: maxValue <= 1 ? 1 : undefined,
           ticks: {
             stepSize: 1,
           },
@@ -537,6 +543,55 @@ function initializeAOS() {
   });
 }
 
+function setActiveSection(sectionId) {
+  const groups = document.querySelectorAll(".dashboard-group");
+  groups.forEach((group) => {
+    const isTarget = group.id === sectionId;
+    group.classList.toggle("is-collapsed", !isTarget);
+  });
+
+  const navLinks = document.querySelectorAll(".dashboard-jump-nav a[data-open-section]");
+  navLinks.forEach((link) => {
+    link.classList.toggle("is-active", link.dataset.openSection === sectionId);
+  });
+}
+
+function openSectionFromAction(sectionId, focusId) {
+  if (!sectionId) return;
+  setActiveSection(sectionId);
+
+  const targetSection = document.getElementById(sectionId);
+  if (targetSection) {
+    targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  if (focusId) {
+    setTimeout(() => {
+      const focusEl = document.getElementById(focusId);
+      if (focusEl && typeof focusEl.focus === "function") {
+        focusEl.focus({ preventScroll: true });
+      }
+    }, 350);
+  }
+}
+
+function initializeDashboardActions() {
+  const actionButtons = document.querySelectorAll(".action-btn[data-open-section]");
+  actionButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      openSectionFromAction(button.dataset.openSection, button.dataset.focusId);
+    });
+  });
+
+  const navLinks = document.querySelectorAll(".dashboard-jump-nav a[data-open-section]");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      openSectionFromAction(link.dataset.openSection);
+    });
+  });
+}
+
 // ============================================
 // Startup: Initialize All Libraries
 // ============================================
@@ -621,6 +676,7 @@ function setupLogoutButton() {
 
 // Load initial data and initialize libraries
 setupLogoutButton();
+initializeDashboardActions();
 loadTeachers();
 loadClasses();
 loadSchedules();
